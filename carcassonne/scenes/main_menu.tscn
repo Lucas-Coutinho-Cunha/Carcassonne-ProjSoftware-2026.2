@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dg0dbakw3agbs"]
+
+[ext_resource type="Script" uid="uid://cxmh0mw5frwhv" path="res://scripts/main_menu.gd" id="1_bqqt6"]
+[ext_resource type="Texture2D" uid="uid://citc6872a3oan" path="res://assets/background.png" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://k3gcf6eic8sf" path="res://assets/title.png" id="2_ekxnf"]
+[ext_resource type="Texture2D" uid="uid://bmpntcbo2r1wq" path="res://assets/playbutton.png" id="4_wu84c"]
+[ext_resource type="AudioStream" uid="uid://x8opoenj5y0x" path="res://assets/aiaiaiaiai-mineirinho.mp3" id="5_8ln24"]
+
+[node name="MainMenu" type="Node2D" unique_id=999539024]
+script = ExtResource("1_bqqt6")
+amplit = 50.0
+freq = 30.0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1749862737]
+position = Vector2(640, 360)
+texture = ExtResource("1_l6cm7")
+
+[node name="title" type="Sprite2D" parent="." unique_id=1195097149]
+position = Vector2(611, 184)
+scale = Vector2(2, 2)
+texture = ExtResource("2_ekxnf")
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=192849893]
+offset_left = 364.0
+offset_top = 408.0
+offset_right = 864.0
+offset_bottom = 608.0
+texture_normal = ExtResource("4_wu84c")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=430881537]
+stream = ExtResource("5_8ln24")
+max_polyphony = 10
+
+[connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]
