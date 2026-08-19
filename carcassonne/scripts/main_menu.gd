@@ -14,10 +14,6 @@ var num: float = 0
 @export var freq: float
 
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("play"):
-		aiaiai.play()
-
 
 func _ready() -> void:
 	pass
@@ -30,4 +26,4 @@ func _process(delta: float) -> void:
 
 
 func _on_texture_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/node_2d.tscn")
+	get_tree().change_scene_to_file("res://scenes/lobby.tscn")
