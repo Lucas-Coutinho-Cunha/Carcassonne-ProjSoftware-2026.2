@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbn5dab6ewuy7"
-path.s3tc="res://.godot/imported/EyeTexture4.png-65e340b43744b9010a694945aa90c44c.s3tc.ctex"
+uid="uid://cewkw25ffwcsy"
+path.bptc="res://.godot/imported/CatTexture5emission.png-2633166d7fd5e640c50369f9df6c113d.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,13 +11,13 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/EyeTexture4.png"
-dest_files=["res://.godot/imported/EyeTexture4.png-65e340b43744b9010a694945aa90c44c.s3tc.ctex"]
+source_file="res://assets/models/CatTexture5emission.png"
+dest_files=["res://.godot/imported/CatTexture5emission.png-2633166d7fd5e640c50369f9df6c113d.bptc.ctex"]
 
 [params]
 
 compress/mode=2
-compress/high_quality=false
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

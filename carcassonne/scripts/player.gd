@@ -6,8 +6,8 @@ class_name Player extends Node3D
 @export_enum("Orange:1", "Black:2", "White:3", "Green:4", "Blue:5", "Yellow:6", "Red:7", "Pink:8") var body: int
 @export_enum("Blue:1", "Yellow:2", "Homo:3", "Beady:4") var eyes: int
 
-var eye_textures: Array[Texture2D]
-
+var textures: Array[Resource] = []
+var type: int = 0
 var text_color: Color
 
 

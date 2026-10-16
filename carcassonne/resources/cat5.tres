@@ -1,11 +1,15 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://dxo5x13r8w0vr"]
 
-[ext_resource type="Texture2D" uid="uid://dhdfkjg5qb3aa" path="res://assets/models/CatTexture3.png" id="1_ax7u6"]
+[ext_resource type="Texture2D" uid="uid://ijeivv16o7oo" path="res://assets/models/CatTexture5.png" id="1_bke50"]
+[ext_resource type="Texture2D" uid="uid://cewkw25ffwcsy" path="res://assets/models/CatTexture5emission.png" id="2_mlvei"]
 
 [resource]
 transparency = 2
 alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
 cull_mode = 2
-albedo_texture = ExtResource("1_ax7u6")
+albedo_texture = ExtResource("1_bke50")
+emission_enabled = true
+emission_energy_multiplier = 5.0
+emission_texture = ExtResource("2_mlvei")
 texture_filter = 0
