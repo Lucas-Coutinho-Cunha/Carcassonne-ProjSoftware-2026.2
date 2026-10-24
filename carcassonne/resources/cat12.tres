@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://crhuy2c3kyihx"]
+
+[ext_resource type="Texture2D" uid="uid://b76nl5kln31ah" path="res://assets/models/CatTexture3.png" id="1_yrgtn"]
+
+[resource]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("1_yrgtn")
+texture_filter = 0
