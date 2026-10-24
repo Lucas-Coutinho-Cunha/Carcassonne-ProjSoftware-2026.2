@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://citc6872a3oan" path="res://assets/background.png" id="1_l6cm7"]
 [ext_resource type="Texture2D" uid="uid://k3gcf6eic8sf" path="res://assets/title.png" id="2_ekxnf"]
 [ext_resource type="Texture2D" uid="uid://bmpntcbo2r1wq" path="res://assets/playbutton.png" id="4_wu84c"]
-[ext_resource type="AudioStream" uid="uid://x8opoenj5y0x" path="res://assets/aiaiaiaiai-mineirinho.mp3" id="5_8ln24"]
 
 [node name="MainMenu" type="Node2D" unique_id=999539024]
 script = ExtResource("1_bqqt6")
@@ -28,7 +27,6 @@ offset_bottom = 608.0
 texture_normal = ExtResource("4_wu84c")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=430881537]
-stream = ExtResource("5_8ln24")
 max_polyphony = 10
 
 [connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]

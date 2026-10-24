@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bu8a4r45wlhon"]
+
+[ext_resource type="Script" uid="uid://omuel5g8f3c4" path="res://scripts/game.gd" id="1_lnu2h"]
+[ext_resource type="Script" uid="uid://46y6ro6uwmlw" path="res://scripts/board_camera.gd" id="2_lbhrr"]
+[ext_resource type="Script" uid="uid://cfgyj5d7yu1oe" path="res://scripts/hud.gd" id="3_iywne"]
+
+[node name="Game" type="Node3D" unique_id=2016064012]
+script = ExtResource("1_lnu2h")
+
+[node name="Camera" type="Camera3D" parent="." unique_id=11011617]
+script = ExtResource("2_lbhrr")
+
+[node name="Light" type="DirectionalLight3D" parent="." unique_id=1747718710]
+
+[node name="Tiles" type="Node3D" parent="." unique_id=978863037]
+
+[node name="Meeples" type="Node3D" parent="." unique_id=1131803660]
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=171549554]
+script = ExtResource("3_iywne")
+
+[node name="Label" type="Label" parent="HUD" unique_id=897783906]
+offset_right = 40.0
+offset_bottom = 23.0
