@@ -1,7 +1,7 @@
 extends Control
 
 @export var map_texture: Texture2D
-@export_file("*.tscn") var game_scene: String = "res://scenes/game.tscn"
+@export_file("*.tscn") var game_scene: String = "res://scenes/player_select.tscn"
 
 @export_group("Mapa")
 @export var map_zoom := 1.3              # >1 dá folga para o mapa se mover
