@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://b4q8vhbkspvft"]
 
-[ext_resource type="Script" uid="uid://dpcqj0auvt50u" path="res://scripts/player.gd" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://dpcqj0auvt50u" path="res://scripts/entities/player.gd" id="1_3vyb7"]
 [ext_resource type="Material" uid="uid://dx1y3j8ex2db1" path="res://resources/cat9.tres" id="2_g2els"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_yde6t"]

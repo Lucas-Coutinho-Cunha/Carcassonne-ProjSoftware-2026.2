@@ -1,4 +1,4 @@
-class_name Player extends Node3D
+class_name player extends Node3D
 
 
 
@@ -9,6 +9,12 @@ class_name Player extends Node3D
 var textures: Array[Resource] = []
 var type: int = 0
 var text_color: Color
+
+var palyerName: String
+var score: int
+var turn: int
+var meeplesAvailable: int
+
 
 
 func set_body(type: int) -> void:
@@ -21,7 +27,10 @@ func set_body(type: int) -> void:
 		6: pass
 		7: pass
 		8: pass
-		
+
+
+func addScore(valor: int) -> void:
+	score += valor
 
 
 func _process(delta: float) -> void:
