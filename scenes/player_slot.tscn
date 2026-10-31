@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player_slot.gd" id="1_script"]
+
+[sub_resource type="Environment" id="Environment_1"]
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.6
+
+[node name="PlayerSlot" type="PanelContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Row" type="HBoxContainer" parent="Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PreviewBox" type="VBoxContainer" parent="Margin/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 4
+
+[node name="Viewer" type="SubViewportContainer" parent="Margin/Row/PreviewBox"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Margin/Row/PreviewBox/Viewer"]
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(400, 120)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="Margin/Row/PreviewBox/Viewer/SubViewport"]
+unique_name_in_owner = true
+current = true
+fov = 40.0
+
+[node name="Light" type="DirectionalLight3D" parent="Margin/Row/PreviewBox/Viewer/SubViewport"]
+unique_name_in_owner = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Margin/Row/PreviewBox/Viewer/SubViewport"]
+environment = SubResource("Environment_1")
+
+[node name="Pivot" type="Node3D" parent="Margin/Row/PreviewBox/Viewer/SubViewport"]
+unique_name_in_owner = true
+
+[node name="SkinRow" type="HBoxContainer" parent="Margin/Row/PreviewBox"]
+layout_mode = 2
+
+[node name="PrevButton" type="Button" parent="Margin/Row/PreviewBox/SkinRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 32)
+layout_mode = 2
+text = "◀"
+
+[node name="SkinLabel" type="Label" parent="Margin/Row/PreviewBox/SkinRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Jogador 1 · Clássico"
+horizontal_alignment = 1
+
+[node name="NextButton" type="Button" parent="Margin/Row/PreviewBox/SkinRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 32)
+layout_mode = 2
+text = "▶"
+
+[node name="TipoBox" type="VBoxContainer" parent="Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="TipoLabel" type="Label" parent="Margin/Row/TipoBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Tipo"
+horizontal_alignment = 1
+
+[node name="TypeButton" type="OptionButton" parent="Margin/Row/TipoBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20

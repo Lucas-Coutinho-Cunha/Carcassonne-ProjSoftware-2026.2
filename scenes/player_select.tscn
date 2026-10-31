@@ -1,0 +1,111 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player_select.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player_slot.tscn" id="2_slot"]
+
+[node name="PlayerSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Bg" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.14, 0.1, 1)
+
+[node name="UI" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="UI"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TopBar" type="HBoxContainer" parent="UI/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="CountLabel" type="Label" parent="UI/VBox/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Número de jogadores"
+
+[node name="CountButton" type="OptionButton" parent="UI/VBox/TopBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+
+[node name="Columns" type="HBoxContainer" parent="UI/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 120
+
+[node name="LeftColumn" type="VBoxContainer" parent="UI/VBox/Columns"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="L1" parent="UI/VBox/Columns/LeftColumn" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="L2" parent="UI/VBox/Columns/LeftColumn" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="L3" parent="UI/VBox/Columns/LeftColumn" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="RightColumn" type="VBoxContainer" parent="UI/VBox/Columns"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="R1" parent="UI/VBox/Columns/RightColumn" instance=ExtResource("2_slot")]
+layout_mode = 2
+mirrored = true
+
+[node name="R2" parent="UI/VBox/Columns/RightColumn" instance=ExtResource("2_slot")]
+layout_mode = 2
+mirrored = true
+
+[node name="R3" parent="UI/VBox/Columns/RightColumn" instance=ExtResource("2_slot")]
+layout_mode = 2
+mirrored = true
+
+[node name="Bottom" type="HBoxContainer" parent="UI/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="BackButton" type="Button" parent="UI/VBox/Bottom"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Voltar"
+
+[node name="StartButton" type="Button" parent="UI/VBox/Bottom"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Começar"
