@@ -20,12 +20,19 @@ static func key(e: InputEvent, keycode: Key) -> bool:
 
 ## "Pass the mouse" screen: waits for a click so the next player starts deliberately.
 class Handoff extends State:
-	func enter(_data := {}) -> void:
+	var _ready_for_click: bool = false
+
+	func enter(_data: Dictionary = {}) -> void:
+		_ready_for_click = false
 		game.handoff.emit(game.current_player())
+		await game.rig.show_player(game.turn_number)  # camera flies to the seat
+		_ready_for_click = true
 
 	func unhandled_input(event: InputEvent) -> void:
-		if TurnStates.left_click(event):
+		if _ready_for_click and TurnStates.left_click(event):
+			_ready_for_click = false
 			game.get_viewport().set_input_as_handled()
+			await game.rig.show_board(game.turn_number)  # back to the orthogonal board view
 			game.sm.change_to(&"draw")
 
 

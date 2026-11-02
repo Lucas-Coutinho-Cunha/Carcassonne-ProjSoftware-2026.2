@@ -1,7 +1,5 @@
 class_name Game
 extends Node3D
-## Attach to the root Node3D. Expected children: Camera (Camera3D with board_camera.gd),
-## Tiles (Node3D), Meeples (Node3D), plus any lights / HUD you like.
 
 signal handoff(player: Player)
 signal tile_drawn(def: TileDef, remaining: int)
@@ -14,10 +12,15 @@ const MEEPLE_PICK_RADIUS := 0.45  # in tile units
 
 @export var tile_size := 2.0
 @export var player_names: PackedStringArray = ["Player 1", "Player 2"]
+@export var player_scene: PackedScene
 
 @onready var camera: Camera3D = $Camera
 @onready var tiles_root: Node3D = $Tiles
 @onready var meeples_root: Node3D = $Meeples
+
+@onready var rig: SeatRig = $SeatRig
+
+var turn_number: int = 0
 
 var sm := StateMachine.new()
 var board := BoardModel.new()
@@ -35,9 +38,14 @@ var _meeple_nodes: Dictionary = {}  # Vector3i(cell.x, cell.y, feature index) ->
 
 
 func _ready() -> void:
-	for i in player_names.size():
-		players.append(Player.new(i, player_names[i], PLAYER_COLORS[i], MEEPLES_PER_PLAYER))
-
+	for i: int in player_names.size():
+		var player: Player = player_scene.instantiate() as Player
+		player.setup_game_state(i, PLAYER_COLORS[i], MEEPLES_PER_PLAYER)
+		player.display_name = player_names[i]
+		add_child(player)
+		players.append(player)
+	rig.place_players(players)
+	
 	deck.assign(TileCatalog.build_deck())
 	deck.shuffle()
 	var start := TileCatalog.start_tile()
@@ -62,6 +70,7 @@ func current_player() -> Player:
 
 
 func advance_player() -> void:
+	turn_number += 1
 	current = (current + 1) % players.size()
 
 

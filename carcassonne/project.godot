@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="Felissonne"
+run/main_scene="uid://bu8a4r45wlhon"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*uid://cqs7aremalr23"
 
 [debug]
 
