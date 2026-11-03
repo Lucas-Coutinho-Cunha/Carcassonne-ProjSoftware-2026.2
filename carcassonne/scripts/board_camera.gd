@@ -1,15 +1,13 @@
 extends Camera3D
-## Orthogonal camera looking straight down. Screen up = -Z = tile north.
-## Mouse wheel zooms, middle-mouse drag pans.
 
-@export var start_size := 14.0
-@export var min_size := 6.0
-@export var max_size := 40.0
+@export var start_size: float = 14.0
+@export var min_size: float = 6.0
+@export var max_size: float = 40.0
 
 
 func _ready() -> void:
 	projection = Camera3D.PROJECTION_ORTHOGONAL
-	size = start_size  # vertical extent of the view in world units
+	size = start_size
 	near = 0.1
 	far = 100.0
 	position = Vector3(0, 30, 0)

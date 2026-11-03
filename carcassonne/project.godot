@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="Felissonne"
+run/main_scene="uid://bu8a4r45wlhon"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*uid://cqs7aremalr23"
 
 [debug]
 
@@ -42,5 +47,6 @@ Tap={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
