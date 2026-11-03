@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://bu8a4r45wlhon"]
 
 [ext_resource type="Script" uid="uid://omuel5g8f3c4" path="res://scripts/game.gd" id="1_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://b4q8vhbkspvft" path="res://scenes/player.tscn" id="2_iywne"]
 [ext_resource type="Script" uid="uid://46y6ro6uwmlw" path="res://scripts/board_camera.gd" id="2_lbhrr"]
 [ext_resource type="Script" uid="uid://cfgyj5d7yu1oe" path="res://scripts/hud.gd" id="3_iywne"]
 [ext_resource type="Script" uid="uid://df2c76sa0voni" path="res://scripts/seat_rig.gd" id="4_lbhrr"]
 
 [node name="Game" type="Node3D" unique_id=2016064012]
 script = ExtResource("1_lnu2h")
+player_scene = ExtResource("2_iywne")
 
 [node name="Camera" type="Camera3D" parent="." unique_id=11011617]
 script = ExtResource("2_lbhrr")

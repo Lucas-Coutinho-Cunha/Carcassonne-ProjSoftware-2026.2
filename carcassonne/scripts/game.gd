@@ -14,6 +14,8 @@ const MEEPLE_PICK_RADIUS := 0.45  # in tile units
 @export var player_names: PackedStringArray = ["Player 1", "Player 2"]
 @export var player_scene: PackedScene
 
+@export var tile_scene: PackedScene   # res://tiles/tile_view.tscn
+
 @onready var camera: Camera3D = $Camera
 @onready var tiles_root: Node3D = $Tiles
 @onready var meeples_root: Node3D = $Meeples
@@ -230,37 +232,10 @@ func _spawn_tile(def: TileDef, r: int, cell: Vector2i) -> void:
 
 
 func _make_tile_node(def: TileDef, r: int) -> Node3D:
-	var n: Node3D
-	if def.mesh:
-		n = def.mesh.instantiate()
-	else:
-		n = _placeholder_tile(def)
-	n.rotation_degrees.y = -90.0 * r
-	return n
-
-
-## Coloured slab with a dark nub on the north edge so rotation is visible.
-func _placeholder_tile(def: TileDef) -> Node3D:
-	var root := Node3D.new()
-	var slab := MeshInstance3D.new()
-	var box := BoxMesh.new()
-	box.size = Vector3(tile_size * 0.98, 0.1, tile_size * 0.98)
-	slab.mesh = box
-	slab.position.y = -0.05
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color.from_hsv(float(absi(hash(def.id)) % 360) / 360.0, 0.45, 0.85)
-	slab.material_override = mat
-	root.add_child(slab)
-	var nub := MeshInstance3D.new()
-	var nb := BoxMesh.new()
-	nb.size = Vector3(tile_size * 0.2, 0.06, tile_size * 0.1)
-	nub.mesh = nb
-	nub.position = Vector3(0, 0.03, -tile_size * 0.42)
-	var dark := StandardMaterial3D.new()
-	dark.albedo_color = Color(0.1, 0.1, 0.1)
-	nub.material_override = dark
-	root.add_child(nub)
-	return root
+	var view: TileView = tile_scene.instantiate() as TileView if tile_scene != null else TileView.new()
+	view.setup(def, tile_size)
+	view.rotation_degrees.y = -90.0 * r
+	return view
 
 
 func _make_meeple(color: Color) -> Node3D:
