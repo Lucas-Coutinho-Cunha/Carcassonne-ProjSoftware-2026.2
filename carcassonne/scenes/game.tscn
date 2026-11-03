@@ -6,9 +6,25 @@
 [ext_resource type="Script" uid="uid://cfgyj5d7yu1oe" path="res://scripts/hud.gd" id="3_iywne"]
 [ext_resource type="Script" uid="uid://df2c76sa0voni" path="res://scripts/seat_rig.gd" id="4_lbhrr"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_iywne"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_p57ef"]
+sky_material = SubResource("ProceduralSkyMaterial_iywne")
+
+[sub_resource type="Environment" id="Environment_u5sy4"]
+background_mode = 2
+sky = SubResource("Sky_p57ef")
+tonemap_mode = 2
+glow_enabled = true
+
 [node name="Game" type="Node3D" unique_id=2016064012]
 script = ExtResource("1_lnu2h")
 player_scene = ExtResource("2_iywne")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1846514458]
+environment = SubResource("Environment_u5sy4")
 
 [node name="Camera" type="Camera3D" parent="." unique_id=11011617]
 script = ExtResource("2_lbhrr")

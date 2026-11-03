@@ -102,12 +102,12 @@ static func all_defs() -> Array[TileDef]:
 				_ft(C, [N, W], Vector2(-0.2, -0.2), true),
 				_ft(R, [E, S], Vector2(0.2, 0.2)),
 			]),
-			# City band joining the top and bottom edges.
-			_t(&"city_band", 1, [C, F, C, F], [
-				_ft(C, [N, S], Vector2.ZERO),
+			# City band joining the left and right edges (top and bottom are fields).
+			_t(&"city_band", 1, [F, C, F, C], [
+				_ft(C, [E, W], Vector2.ZERO),
 			]),
-			_t(&"city_band_shield", 2, [C, F, C, F], [
-				_ft(C, [N, S], Vector2.ZERO, true),
+			_t(&"city_band_shield", 2, [F, C, F, C], [
+				_ft(C, [E, W], Vector2.ZERO, true),
 			]),
 			# Two SEPARATE cities on adjacent edges: top and left.
 			_t(&"city_caps_adjacent", 2, [C, F, F, C], [

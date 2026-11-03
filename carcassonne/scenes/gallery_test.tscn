@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cqubsq6ssiobd"]
+
+[ext_resource type="Script" uid="uid://t82dvo30vhmy" path="res://scripts/tile_gallery.gd" id="1_jqswv"]
+
+[node name="GalleryTest" type="Node3D" unique_id=678603019]
+script = ExtResource("1_jqswv")
