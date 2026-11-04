@@ -7,12 +7,14 @@ signal scores_changed
 signal game_over(winners: Array)
 
 const MEEPLES_PER_PLAYER := 7
-const MEEPLE_PICK_RADIUS := 0.45  # in tile units
+const MEEPLE_PICK_RADIUS := 0.45
+
+@export var meeple_scene: PackedScene
 
 @export var tile_size := 2.0
 @export var player_scene: PackedScene
 
-@export var tile_scene: PackedScene   # res://tiles/tile_view.tscn
+@export var tile_scene: PackedScene
 
 @onready var camera: Camera3D = $Camera
 @onready var tiles_root: Node3D = $Tiles
@@ -27,14 +29,14 @@ var board := BoardModel.new()
 var players: Array[Player] = []
 var current := 0
 var deck: Array[TileDef] = []
-var tile_def: TileDef            # tile being placed this turn
-var rot := 0                     # its rotation, clockwise quarter turns
+var tile_def: TileDef
+var rot := 0
 var last_placed: BoardModel.Placed
 
 var _ghost: Node3D
 var _ghost_mat: StandardMaterial3D
 var _slots: Array[Node3D] = []
-var _meeple_nodes: Dictionary = {}  # Vector3i(cell.x, cell.y, feature index) -> Node3D
+var _meeple_nodes: Dictionary = {}
 
 
 func _ready() -> void:
@@ -64,7 +66,6 @@ func _ready() -> void:
 	sm.change_to(&"handoff")
 
 
-# ------------------------------------------------------------------ turn flow
 
 func current_player() -> Player:
 	return players[current]
@@ -75,7 +76,6 @@ func advance_player() -> void:
 	current = (current + 1) % players.size()
 
 
-## Rules: a tile that fits nowhere is discarded and another one is drawn.
 func draw_playable_tile() -> bool:
 	while not deck.is_empty():
 		var t: TileDef = deck.pop_back()
@@ -126,10 +126,6 @@ func finish_game() -> void:
 	game_over.emit(players.filter(func(p: Player) -> bool: return p.score == best))
 
 
-# -------------------------------------------------------------------- picking
-# With an orthogonal top-down camera every pixel is a parallel ray, so a ray vs.
-# the ground plane gives the exact world position. No physics bodies needed.
-
 func mouse_world() -> Vector3:
 	var mouse := get_viewport().get_mouse_position()
 	var origin := camera.project_ray_origin(mouse)
@@ -149,11 +145,9 @@ func cell_to_world(c: Vector2i) -> Vector3:
 func anchor_world(p: BoardModel.Placed, feature_index: int) -> Vector3:
 	var a: Vector2 = p.def.features[feature_index].get("anchor", Vector2.ZERO)
 	for i in p.rot:
-		a = Vector2(-a.y, a.x)  # 90 degrees clockwise seen from above
+		a = Vector2(-a.y, a.x)
 	return cell_to_world(p.cell) + Vector3(a.x, 0.0, a.y) * tile_size
 
-
-# ------------------------------------------------------------- ghost / slots
 
 func show_ghost() -> void:
 	_ghost = _make_tile_node(tile_def, rot)
@@ -161,7 +155,7 @@ func show_ghost() -> void:
 	_ghost_mat = StandardMaterial3D.new()
 	_ghost_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_ghost_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	var marker := MeshInstance3D.new()   # flat green/red overlay: valid / invalid cell
+	var marker := MeshInstance3D.new()
 	var quad := PlaneMesh.new()
 	quad.size = Vector2.ONE * tile_size * 0.96
 	marker.mesh = quad
@@ -177,7 +171,7 @@ func move_ghost(cell: Vector2i, valid: bool) -> void:
 
 func rotate_tile() -> void:
 	rot = (rot + 1) % 4
-	_ghost.rotation_degrees.y = -90.0 * rot  # +Y rotation is counter-clockwise from above
+	_ghost.rotation_degrees.y = -90.0 * rot
 
 
 func hide_ghost() -> void:
@@ -211,7 +205,6 @@ func clear_meeple_slots() -> void:
 	_slots.clear()
 
 
-## Returns the feature index whose anchor is closest to the mouse, or -1.
 func pick_slot(options: Array[int]) -> int:
 	var mouse := mouse_world()
 	var best := -1
@@ -224,7 +217,6 @@ func pick_slot(options: Array[int]) -> int:
 	return best
 
 
-# ------------------------------------------------------------------- visuals
 
 func _spawn_tile(def: TileDef, r: int, cell: Vector2i) -> void:
 	var n := _make_tile_node(def, r)
@@ -240,16 +232,6 @@ func _make_tile_node(def: TileDef, r: int) -> Node3D:
 
 
 func _make_meeple(color: Color) -> Node3D:
-	var k := tile_size * 0.5
-	var root := Node3D.new()
-	var mi := MeshInstance3D.new()
-	var cap := CapsuleMesh.new()
-	cap.radius = 0.18 * k
-	cap.height = 0.6 * k
-	mi.mesh = cap
-	mi.position.y = 0.3 * k
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = color
-	mi.material_override = mat
-	root.add_child(mi)
-	return root
+	var view: MeepleView = meeple_scene.instantiate() as MeepleView if meeple_scene != null else MeepleView.new()
+	view.setup(color, tile_size)
+	return view

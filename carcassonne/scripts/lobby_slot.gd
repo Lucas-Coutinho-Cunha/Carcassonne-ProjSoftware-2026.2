@@ -1,8 +1,5 @@
 class_name LobbySlot
 extends PanelContainer
-## One row of the lobby: the player's name, an avatar picker with a 3D preview, and a
-## human/bot setting. It edits GameSession.players[index] directly.
-## Set `player_scene`, add the slot to the tree, then call setup().
 
 signal remove_requested(index: int)
 
@@ -22,7 +19,6 @@ func setup(index: int, removable: bool) -> void:
 	row.add_theme_constant_override("separation", 16)
 	add_child(row)
 
-	# Name column.
 	var name_column: VBoxContainer = VBoxContainer.new()
 	row.add_child(name_column)
 	var title: Label = Label.new()
@@ -35,13 +31,11 @@ func setup(index: int, removable: bool) -> void:
 	name_edit.text_changed.connect(_on_name_changed)
 	name_column.add_child(name_edit)
 
-	# 3D preview of the avatar on the model.
 	_preview = AvatarPreview.new()
 	_preview.player_scene = player_scene
 	row.add_child(_preview)
 	_preview.show_avatar(_setup.avatar)
 
-	# Avatar picker and human/bot setting.
 	var choice_column: VBoxContainer = VBoxContainer.new()
 	choice_column.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_child(choice_column)

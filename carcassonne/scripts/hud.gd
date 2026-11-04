@@ -1,21 +1,14 @@
 extends CanvasLayer
-## Child of the Game node. Shows ONLY the players' scores, as one card per player, plus the
-## "X's turn" banner. Everything is built in code. The old status Label (if your scene still
-## has one named "Label") is removed automatically.
 
-## Optional custom font (import a .ttf/.otf and drag it here). Empty = Godot's default font.
+
 @export var font: Font
-## Distance from the top-left corner of the screen.
 @export var margin: int = 20
 @export var card_width: float = 240.0
 @export var name_font_size: int = 22
 @export var score_font_size: int = 36
-## Text of the turn banner; %s is replaced by the player's name.
 @export var turn_banner_format: String = "%s's turn"
 @export var banner_font_size: int = 64
-## Seconds the banner stays fully visible.
 @export var banner_hold_time: float = 1.2
-## Seconds for the fade out (the fade in takes half of this).
 @export var banner_fade_time: float = 0.5
 
 const CARD_BACKGROUND: Color = Color(0.09, 0.09, 0.13, 0.85)
@@ -29,7 +22,6 @@ var _banner_label: Label
 var _banner_tween: Tween
 
 
-## The visual parts of one player's card.
 class Card extends RefCounted:
 	var panel: PanelContainer
 	var score_label: Label
@@ -51,13 +43,11 @@ func _ready() -> void:
 	add_child(_card_box)
 	_build_banner()
 
-	# The first handoff is emitted at the end of Game._ready(), once the players exist.
 	game.handoff.connect(_on_handoff)
 	game.scores_changed.connect(_on_scores_changed)
 	game.game_over.connect(_on_game_over)
 
 
-# ---------------------------------------------------------------- score cards
 
 func _build_cards() -> void:
 	for player: Player in game.players:
@@ -123,7 +113,6 @@ func _style_label(label: Label, font_size: int) -> void:
 	label.add_theme_constant_override("outline_size", 4)
 
 
-## Brightens the card of the player whose turn it is and dims the others.
 func _set_active(index: int) -> void:
 	for i: int in _cards.size():
 		var card: Card = _cards[i]
@@ -141,7 +130,6 @@ func _on_scores_changed() -> void:
 			continue
 		if card.tween != null and card.tween.is_valid():
 			card.tween.kill()
-		# Count up to the new score and flash the number.
 		card.score_label.modulate = Color(1.0, 0.85, 0.3)
 		card.tween = create_tween()
 		card.tween.set_parallel(true)
@@ -154,21 +142,19 @@ func _set_score_text(value: float, card: Card) -> void:
 	card.score_label.text = str(card.shown_score)
 
 
-# --------------------------------------------------------------------- banner
 
 func _build_banner() -> void:
 	_banner_label = Label.new()
 	_banner_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_banner_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_banner_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_banner_label.mouse_filter = Control.MOUSE_FILTER_IGNORE  # never blocks clicks on the board
+	_banner_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_style_label(_banner_label, banner_font_size)
 	_banner_label.add_theme_constant_override("outline_size", 12)
 	_banner_label.modulate.a = 0.0
 	add_child(_banner_label)
 
 
-## Connected to Game.handoff, which fires every time the turn passes to a player.
 func _on_handoff(player: Player) -> void:
 	if _cards.is_empty():
 		_build_cards()
@@ -187,7 +173,6 @@ func _show_turn_banner(player: Player) -> void:
 	_banner_tween.tween_property(_banner_label, "modulate:a", 0.0, banner_fade_time)
 
 
-## End of the game: the winner's name stays on screen.
 func _on_game_over(winners: Array) -> void:
 	var names: String = ", ".join(winners.map(func(p: Player) -> String: return p.display_name))
 	if _banner_tween != null and _banner_tween.is_valid():

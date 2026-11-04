@@ -1,6 +1,5 @@
 class_name State
 extends RefCounted
-## Base class for turn states. `game` is assigned by StateMachine.add_state().
 
 var game: Game
 

@@ -1,13 +1,8 @@
 extends Control
-## Lobby screen. Make a scene with a Control root, attach this script, and assign the two
-## exports in the inspector. The whole UI is built in code, so no other nodes are needed.
-## It needs the GameSession autoload to be registered.
 
-## Your Player scene (the model + player.gd). Used for the 3D avatar previews.
+
 @export var player_scene: PackedScene
-## The scene that contains the Game node. Loaded when "Start game" is pressed.
 @export var game_scene: PackedScene
-## Start every visit to the lobby with the default two players.
 @export var reset_on_open: bool = true
 
 var _slots_box: VBoxContainer
@@ -18,7 +13,7 @@ var _start_button: Button
 
 func _ready() -> void:
 	_build_ui()
-	Sfx.hook_buttons(self)  # click sound on every button, including rows built later
+	Sfx.hook_buttons(self)
 	GameSession.roster_changed.connect(_rebuild_slots, CONNECT_DEFERRED)
 	if reset_on_open:
 		GameSession.reset_to_defaults()
@@ -77,7 +72,6 @@ func _rebuild_slots() -> void:
 		var slot: LobbySlot = LobbySlot.new()
 		slot.player_scene = player_scene
 		_slots_box.add_child(slot)
-		# The first MIN_PLAYERS slots can't be removed, so the lobby never drops below 2.
 		slot.setup(i, i >= GameSession.MIN_PLAYERS)
 		slot.remove_requested.connect(_on_remove_requested)
 

@@ -19,7 +19,6 @@ func _ready() -> void:
 	pass
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	num += 1
 	title_sprite.position.y = sin(num/freq)*amplit + 200

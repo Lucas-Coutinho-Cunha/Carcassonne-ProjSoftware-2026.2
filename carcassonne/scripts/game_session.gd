@@ -1,18 +1,9 @@
 extends Node
-## Autoload. Register it in Project Settings > Globals (Autoload) with the name "GameSession".
-## Do NOT give this script a class_name: the autoload name is already the global identifier.
-##
-## The lobby writes the chosen players here; Game reads them when it starts.
-## It stores plain data (PlayerSetup), never Player nodes, so it survives scene changes.
-## Every player must have a DIFFERENT avatar, because the avatar decides the meeple colour.
 
-## Emitted when players are added, removed or the roster is reset. Edits to a player's
-## name, avatar or bot flag change the PlayerSetup directly and do not emit it.
 signal roster_changed
 
 const MIN_PLAYERS: int = 2
 const MAX_PLAYERS: int = 6
-## Where the AvatarLibrary resource lives. Change this if you save it somewhere else.
 const LIBRARY_PATH: String = "res://avatars/avatar_library.tres"
 
 var library: AvatarLibrary = AvatarLibrary.new()
@@ -26,7 +17,6 @@ func _ready() -> void:
 			library = loaded
 	if library.avatars.size() < MAX_PLAYERS:
 		push_error("GameSession: %s needs at least %d avatars so every player can have a different one (found %d)" % [LIBRARY_PATH, MAX_PLAYERS, library.avatars.size()])
-	# Lets you run the game scene directly (F6) without going through the lobby.
 	if players.is_empty():
 		reset_to_defaults()
 
@@ -43,8 +33,6 @@ func clear() -> void:
 	roster_changed.emit()
 
 
-## Adds a player with the first free avatar. Returns false when the roster is full
-## or no free avatar is left.
 func add_player(display_name: String = "", is_bot: bool = false) -> bool:
 	if players.size() >= MAX_PLAYERS:
 		return false
@@ -73,7 +61,6 @@ func can_start() -> bool:
 	return true
 
 
-# ------------------------------------------------------------------- avatars
 
 func is_avatar_taken(avatar: AvatarDef, ignore_index: int = -1) -> bool:
 	for i: int in players.size():
@@ -89,8 +76,6 @@ func first_free_avatar() -> AvatarDef:
 	return null
 
 
-## Moves player `index` to the next (direction 1) or previous (direction -1) avatar that
-## nobody else has. Returns the avatar the player now has.
 func step_avatar(index: int, direction: int) -> AvatarDef:
 	var setup: PlayerSetup = players[index]
 	var count: int = library.avatars.size()

@@ -1,11 +1,7 @@
 class_name CatalogValidator
 extends RefCounted
-## Checks tile DATA for authoring mistakes. Placement rules live in BoardModel.can_place();
-## this only guarantees that the data feeding that rule is consistent.
-## Run it once at startup in debug builds (see usage at the bottom).
 
 
-## Returns a list of human-readable problems. Empty means the catalog is consistent.
 static func validate(defs: Array[TileDef], expected_total: int = -1) -> PackedStringArray:
 	var errors: PackedStringArray = PackedStringArray()
 	var total: int = 0
@@ -27,7 +23,6 @@ static func _validate_def(def: TileDef) -> PackedStringArray:
 		errors.append("%s: edges must have exactly 4 entries (N, E, S, W)" % def.id)
 		return errors
 
-	# How many features claim each side. ROAD/CITY edges need exactly one, FIELD edges none.
 	var claims: Array[int] = [0, 0, 0, 0]
 	for i: int in def.features.size():
 		var fd: Dictionary = def.features[i]
@@ -58,11 +53,3 @@ static func _validate_def(def: TileDef) -> PackedStringArray:
 		elif claims[side] != 1:
 			errors.append("%s: road/city edge on side %d must belong to exactly one feature (has %d)" % [def.id, side, claims[side]])
 	return errors
-
-
-# Usage, e.g. at the top of Game._ready() (rename TileCatalog._defs() to all_defs() first):
-#
-#	if OS.is_debug_build():
-#		var problems: PackedStringArray = CatalogValidator.validate(TileCatalog.all_defs(), 72)
-#		for message: String in problems:
-#			push_error(message)

@@ -1,13 +1,6 @@
 extends Node
-## Autoload. Register it in Project Settings > Globals (Autoload) with the name "Sfx".
-## Do NOT give this script a class_name: the autoload name is already the global identifier.
-##
-## Plays the sounds from the SoundBank. A small pool of players lets sounds overlap
-## (e.g. a tile sound and a meeple sound in quick succession).
 
-## Where the SoundBank resource lives. Change this if you save it somewhere else.
 const BANK_PATH: String = "res://audio/sound_bank.tres"
-## Audio bus to play on. If no bus with this name exists, "Master" is used.
 const BUS_NAME: StringName = &"SFX"
 const VOICES: int = 8
 
@@ -51,8 +44,7 @@ func play_camera_away() -> void:
 	_play(bank.camera_away)
 
 
-## Makes every button under `root` play the UI click, including buttons that are created
-## later (the lobby rebuilds its rows in code). Stops listening when `root` leaves the tree.
+
 func hook_buttons(root: Node) -> void:
 	for button: BaseButton in _find_buttons(root):
 		_hook(button)

@@ -7,14 +7,13 @@ extends Node3D
 var textures: Array[Resource] = []
 var text_color: Color = Color.WHITE
 
-# Game state, filled in by Game through setup_game_state().
 var id: int = 0
 var display_name: String = ""
 var color: Color = Color.WHITE
 var score: int = 0
 var meeples_left: int = 0
-@export var model_mesh: MeshInstance3D   # the mesh that wears the avatar material
-@export var avatar_surface_index: int = -1   # -1 = every surface
+@export var model_mesh: MeshInstance3D
+@export var avatar_surface_index: int = -1
 
 var avatar: AvatarDef
 var is_bot: bool = false

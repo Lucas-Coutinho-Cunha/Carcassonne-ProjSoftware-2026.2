@@ -1,12 +1,8 @@
 class_name AvatarPreview
 extends SubViewportContainer
-## A small spinning 3D view of the player model wearing an avatar's material.
-## Set `player_scene` (your Player scene, which must have apply_avatar()) before adding
-## this node to the tree, then call show_avatar().
 
 @export var player_scene: PackedScene
 @export var preview_size: Vector2 = Vector2(160.0, 200.0)
-## Tune these two to frame your model.
 @export var camera_position: Vector3 = Vector3(0.0, 1.0, 3.0)
 @export var camera_target: Vector3 = Vector3(0.0, 0.8, 0.0)
 @export var spin_degrees_per_second: float = 30.0
@@ -21,7 +17,7 @@ func _ready() -> void:
 	custom_minimum_size = preview_size
 
 	var viewport: SubViewport = SubViewport.new()
-	viewport.own_world_3d = true  # keeps the preview separate from the real game world
+	viewport.own_world_3d = true
 	viewport.transparent_bg = true
 	add_child(viewport)
 

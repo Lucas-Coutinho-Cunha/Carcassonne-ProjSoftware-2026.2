@@ -1,18 +1,16 @@
 class_name BoardModel
 extends RefCounted
-## Pure game logic, no nodes. Cells are Vector2i; x = east, y = south (world Z).
-## Cities and roads are tracked with a union-find: every feature of every placed
-## tile is a node, and touching features are merged as tiles are placed.
+
 
 const DIRS: Array[Vector2i] = [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)] # N E S W
 
 
 class Placed:
 	var def: TileDef
-	var rot := 0                      # clockwise quarter turns
+	var rot := 0
 	var cell := Vector2i.ZERO
-	var feature_ids: Array[int] = []  # index-aligned with def.features
-	var side_feature: Array[int] = [-1, -1, -1, -1]  # board side -> feature id
+	var feature_ids: Array[int] = []
+	var side_feature: Array[int] = [-1, -1, -1, -1]
 
 	func edge_at(side: int) -> int:
 		return def.edges[posmod(side - rot, 4)]
@@ -21,18 +19,17 @@ class Placed:
 class Feat:
 	var kind := 0
 	var open_ends := 0
-	var tiles: Dictionary = {}          # Vector2i -> true
+	var tiles: Dictionary = {}
 	var shields := 0
-	var meeples: Array[Dictionary] = [] # {player, cell, index}
+	var meeples: Array[Dictionary] = []
 	var scored := false
 
 
-var tiles: Dictionary = {}              # Vector2i -> Placed
+var tiles: Dictionary = {}
 var _parent: Array[int] = []
 var _feats: Array[Feat] = []
 
 
-# ---------------------------------------------------------------- placement
 
 func can_place(def: TileDef, rot: int, cell: Vector2i) -> bool:
 	if tiles.has(cell):
@@ -88,7 +85,6 @@ func place(def: TileDef, rot: int, cell: Vector2i) -> Placed:
 				p.side_feature[(s + rot) % 4] = id
 				f.open_ends += 1
 	tiles[cell] = p
-	# Merge with the features on the neighbouring tiles.
 	for side in 4:
 		var mine := p.side_feature[side]
 		if mine < 0:
@@ -109,19 +105,18 @@ func _find(i: int) -> int:
 func _join(a: int, b: int) -> void:
 	var ra := _find(a)
 	var rb := _find(b)
-	if ra == rb:                      # closes a loop inside one feature
+	if ra == rb:
 		_feats[ra].open_ends -= 2
 		return
 	var fa := _feats[ra]
 	var fb := _feats[rb]
 	_parent[rb] = ra
-	fa.open_ends += fb.open_ends - 2  # the two touching edges are now closed
+	fa.open_ends += fb.open_ends - 2
 	fa.tiles.merge(fb.tiles)
 	fa.shields += fb.shields
 	fa.meeples.append_array(fb.meeples)
 
 
-# ------------------------------------------------------------------ meeples
 
 func _root(cell: Vector2i, index: int) -> Feat:
 	var p: Placed = tiles[cell]
@@ -136,15 +131,11 @@ func place_meeple(cell: Vector2i, index: int, player: int) -> void:
 	_root(cell, index).meeples.append({"player": player, "cell": cell, "index": index})
 
 
-# ------------------------------------------------------------------ scoring
 
-## Call right after a tile (and optional meeple) was placed. Returns one entry per
-## feature that just got completed: {kind, points, winners, meeples}.
-## Meeples on those features are removed from the model; the caller returns them.
 func collect_completed(cell: Vector2i) -> Array[Dictionary]:
 	var out: Array[Dictionary] = []
 	var seen := {}
-	for dx in range(-1, 2):          # 3x3 covers the placed tile and nearby monasteries
+	for dx in range(-1, 2):
 		for dy in range(-1, 2):
 			var p: Placed = tiles.get(cell + Vector2i(dx, dy))
 			if p == null:
@@ -160,7 +151,6 @@ func collect_completed(cell: Vector2i) -> Array[Dictionary]:
 	return out
 
 
-## End-of-game scoring for everything still unfinished that has meeples.
 func final_scoring() -> Array[Dictionary]:
 	var out: Array[Dictionary] = []
 	for i in _feats.size():
@@ -198,7 +188,7 @@ func _resolve(f: Feat, final: bool) -> Dictionary:
 		TileDef.Kind.ROAD:
 			pts = f.tiles.size()
 		TileDef.Kind.MONASTERY:
-			pts = 1 + _neighbor_count(f.tiles.keys()[0])  # 9 when complete
+			pts = 1 + _neighbor_count(f.tiles.keys()[0])
 	var counts := {}
 	for m in f.meeples:
 		counts[m.player] = counts.get(m.player, 0) + 1
