@@ -25,6 +25,7 @@ const MEEPLE_PICK_RADIUS := 0.45
 var turn_number: int = 0
 
 var sm := StateMachine.new()
+var ai := CarcassonneAI.new()
 var board := BoardModel.new()
 var players: Array[Player] = []
 var current := 0
@@ -57,9 +58,11 @@ func _ready() -> void:
 
 	sm.game = self
 	add_child(sm)
+	add_child(ai)
 	sm.add_state(&"handoff", TurnStates.Handoff.new())
 	sm.add_state(&"draw", TurnStates.Draw.new())
 	sm.add_state(&"place_tile", TurnStates.PlaceTile.new())
+	sm.add_state(&"bot_turn", TurnStates.BotTurn.new())
 	sm.add_state(&"place_meeple", TurnStates.PlaceMeeple.new())
 	sm.add_state(&"score", TurnStates.Score.new())
 	sm.add_state(&"game_end", TurnStates.GameEnd.new())

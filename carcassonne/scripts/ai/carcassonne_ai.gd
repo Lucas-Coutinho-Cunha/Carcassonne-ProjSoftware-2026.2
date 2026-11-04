@@ -58,6 +58,7 @@ static func context_from_game(game: Game, player_id: int = -1) -> Dictionary:
 func request_move(ctx: Dictionary) -> bool:
 	if is_thinking():
 		return false
+	join()   # reap a finished worker whose _finish() hasn't run yet
 	var state := _state_from_context(ctx)
 	if state == null:
 		search_failed.emit("erro, o contexto parece invalido")
@@ -322,6 +323,8 @@ func _state_from_context(ctx: Dictionary) -> AIBoardSim.SimState:
 	s.meeples = PackedInt32Array(ctx.get("meeples", PackedInt32Array([7, 7])))
 	s.turn = ctx.get("turn", 0)
 	s.deck = _deck_counts(ctx.get("deck"))
+	# The tile in hand was already popped from game.deck, but AIBoardSim.apply() decrements it.
+	s.deck[def] = int(s.deck.get(def, 0)) + 1
 	if s.scores.is_empty():
 		return null
 	return s
