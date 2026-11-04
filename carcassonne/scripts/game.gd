@@ -6,12 +6,10 @@ signal tile_drawn(def: TileDef, remaining: int)
 signal scores_changed
 signal game_over(winners: Array)
 
-const PLAYER_COLORS: Array[Color] = [Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.BLACK]
 const MEEPLES_PER_PLAYER := 7
 const MEEPLE_PICK_RADIUS := 0.45  # in tile units
 
 @export var tile_size := 2.0
-@export var player_names: PackedStringArray = ["Player 1", "Player 2"]
 @export var player_scene: PackedScene
 
 @export var tile_scene: PackedScene   # res://tiles/tile_view.tscn
@@ -40,11 +38,12 @@ var _meeple_nodes: Dictionary = {}  # Vector3i(cell.x, cell.y, feature index) ->
 
 
 func _ready() -> void:
-	for i: int in player_names.size():
+	for i: int in GameSession.players.size():
+		var setup: PlayerSetup = GameSession.players[i]
 		var player: Player = player_scene.instantiate() as Player
-		player.setup_game_state(i, PLAYER_COLORS[i], MEEPLES_PER_PLAYER)
-		player.display_name = player_names[i]
 		add_child(player)
+		setup.apply_to(player)
+		player.setup_game_state(i, setup.avatar.color, MEEPLES_PER_PLAYER)
 		players.append(player)
 	rig.place_players(players)
 	
@@ -91,6 +90,7 @@ func draw_playable_tile() -> bool:
 func commit_tile(cell: Vector2i) -> void:
 	last_placed = board.place(tile_def, rot, cell)
 	_spawn_tile(tile_def, rot, cell)
+	Sfx.play_tile_placed()
 
 
 func put_meeple(index: int) -> void:
@@ -102,6 +102,7 @@ func put_meeple(index: int) -> void:
 	meeples_root.add_child(node)
 	_meeple_nodes[Vector3i(last_placed.cell.x, last_placed.cell.y, index)] = node
 	scores_changed.emit()
+	Sfx.play_meeple_placed()
 
 
 func apply_results(results: Array[Dictionary]) -> void:

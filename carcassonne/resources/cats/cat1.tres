@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AvatarDef" format=3 uid="uid://pfn61rq0tih8"]
+
+[ext_resource type="Script" uid="uid://dkyvt6pkm4wbq" path="res://scripts/avatar_def.gd" id="1_behej"]
+[ext_resource type="Material" uid="uid://btwd7te2vbd2u" path="res://resources/cat1.tres" id="1_xw0cv"]
+
+[resource]
+script = ExtResource("1_behej")
+id = &"0"
+display_name = "Black"
+material = ExtResource("1_xw0cv")
+color = Color(0.11858138, 0.11858138, 0.11858138, 1)

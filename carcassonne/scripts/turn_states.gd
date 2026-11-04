@@ -1,6 +1,4 @@
 class_name TurnStates
-## One turn:  handoff -> draw -> place_tile -> place_meeple -> score -> (next player) handoff
-## Transitions triggered from enter() are deferred so the machine never re-enters itself.
 
 
 static func left_click(e: InputEvent) -> bool:
@@ -18,21 +16,20 @@ static func key(e: InputEvent, keycode: Key) -> bool:
 	return k != null and k.pressed and not k.echo and k.keycode == keycode
 
 
-## "Pass the mouse" screen: waits for a click so the next player starts deliberately.
 class Handoff extends State:
 	var _ready_for_click: bool = false
 
 	func enter(_data: Dictionary = {}) -> void:
 		_ready_for_click = false
 		game.handoff.emit(game.current_player())
-		await game.rig.show_player(game.turn_number)  # camera flies to the seat
+		await game.rig.show_player(game.turn_number)
 		_ready_for_click = true
 
 	func unhandled_input(event: InputEvent) -> void:
 		if _ready_for_click and TurnStates.left_click(event):
 			_ready_for_click = false
 			game.get_viewport().set_input_as_handled()
-			await game.rig.show_board(game.turn_number)  # back to the orthogonal board view
+			await game.rig.show_board(game.turn_number)
 			game.sm.change_to(&"draw")
 
 
@@ -66,7 +63,7 @@ class PlaceTile extends State:
 
 
 class PlaceMeeple extends State:
-	var options: Array[int] = []  # feature indexes on the tile just placed
+	var options: Array[int] = []
 
 	func enter(_data := {}) -> void:
 		options.clear()
@@ -90,7 +87,7 @@ class PlaceMeeple extends State:
 				game.put_meeple(i)
 				game.sm.change_to(&"score")
 		elif TurnStates.right_click(event) or TurnStates.key(event, KEY_SPACE) or TurnStates.key(event, KEY_ENTER):
-			game.sm.change_to(&"score")  # skip placing a meeple
+			game.sm.change_to(&"score")
 
 
 class Score extends State:

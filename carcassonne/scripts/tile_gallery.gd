@@ -1,9 +1,5 @@
 extends Node3D
-## Debug scene: attach to an empty Node3D in a new scene and run it (F6).
-## Shows every tile type in a grid, labelled with its id, so you can compare each
-## texture against its catalog entry. Also runs CatalogValidator and prints problems.
 
-## The same tile scene Game uses (root has tile_view.gd). Leave empty to use the fallback mesh.
 @export var tile_scene: PackedScene
 @export var tile_size: float = 2.0
 @export var spacing: float = 0.5
@@ -35,7 +31,7 @@ func _ready() -> void:
 		label.pixel_size = 0.008
 		label.modulate = Color.WHITE
 		label.outline_size = 8
-		label.rotation_degrees = Vector3(-90.0, 0.0, 0.0)  # lie flat, readable from above
+		label.rotation_degrees = Vector3(-90.0, 0.0, 0.0)
 		label.position = origin + Vector3(0.0, 0.02, tile_size * 0.5 + 0.18)
 		add_child(label)
 

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AvatarLibrary" format=3 uid="uid://dord50fwuf0c4"]
+
+[ext_resource type="Script" uid="uid://dkyvt6pkm4wbq" path="res://scripts/avatar_def.gd" id="1_fvqvv"]
+[ext_resource type="Resource" uid="uid://pfn61rq0tih8" path="res://resources/cats/cat1.tres" id="2_0lty8"]
+[ext_resource type="Script" uid="uid://cdbl1pll55a4" path="res://scripts/avatar_library.gd" id="2_41kei"]
+[ext_resource type="Resource" uid="uid://ctymwmhgp8pji" path="res://resources/cats/cat2.tres" id="3_wu2hd"]
+[ext_resource type="Resource" uid="uid://gj0d8swgld7f" path="res://resources/cats/cat3.tres" id="4_a5ywx"]
+[ext_resource type="Resource" uid="uid://bdl8c6fvxjtgg" path="res://resources/cats/cat4.tres" id="5_r0vy4"]
+[ext_resource type="Resource" uid="uid://1fhrwxj0mo7x" path="res://resources/cats/cat5.tres" id="6_k8fch"]
+[ext_resource type="Resource" uid="uid://c5ch3f8p3kfq6" path="res://resources/cats/cat6.tres" id="7_21r3y"]
+[ext_resource type="Resource" uid="uid://ba3wyv4h0n0bc" path="res://resources/cats/cat7.tres" id="8_7hgk7"]
+[ext_resource type="Resource" uid="uid://dyqo4gg0auaat" path="res://resources/cats/cat8.tres" id="9_qc35n"]
+[ext_resource type="Resource" uid="uid://b1psviw4u0fwp" path="res://resources/cats/cat9.tres" id="10_yoo3c"]
+
+[resource]
+script = ExtResource("2_41kei")
+avatars = Array[ExtResource("1_fvqvv")]([ExtResource("2_0lty8"), ExtResource("3_wu2hd"), ExtResource("4_a5ywx"), ExtResource("5_r0vy4"), ExtResource("6_k8fch"), ExtResource("7_21r3y"), ExtResource("8_7hgk7"), ExtResource("9_qc35n"), ExtResource("10_yoo3c")])

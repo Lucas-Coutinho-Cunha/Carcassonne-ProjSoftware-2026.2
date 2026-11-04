@@ -21,6 +21,7 @@ glow_enabled = true
 
 [node name="Game" type="Node3D" unique_id=2016064012]
 script = ExtResource("1_lnu2h")
+tile_size = 1.5
 player_scene = ExtResource("2_iywne")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1846514458]

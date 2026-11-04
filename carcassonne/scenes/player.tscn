@@ -463,10 +463,13 @@ _data = {
 &"lobbyidle": SubResource("Animation_nq5be")
 }
 
-[node name="Player" type="Node3D" unique_id=261363084]
+[node name="Player" type="Node3D" unique_id=261363084 node_paths=PackedStringArray("model_mesh")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 script = ExtResource("1_3vyb7")
+model_mesh = NodePath("Cat/armature/Skeleton3D/armature")
 
 [node name="Cat" type="Node3D" parent="." unique_id=357718212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6124279, 0)
 
 [node name="armature" type="Node3D" parent="Cat" unique_id=627577920]
 

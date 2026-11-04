@@ -1,34 +1,18 @@
 class_name TileView
 extends Node3D
-## Visual for one tile (placed tile or ghost). Every tile type uses the SAME flat-square
-## mesh; only the texture changes. Materials are cached per tile type, so 72 tiles
-## share 24 materials.
-##
-## Scene setup (e.g. res://tiles/tile_view.tscn):
-##     TileView (Node3D, this script)
-##     └─ Mesh (MeshInstance3D)   <- your flattened-square mesh
-## The mesh's top face must point up (+Y) and its UVs must cover the whole texture,
-## with the top of the image at the mesh's -Z edge (north).
 
-## Path to the child MeshInstance3D that holds your mesh. If no such child exists, a
-## plain flat PlaneMesh is created so the game still runs.
 @export var mesh_node_path: NodePath = ^"Mesh"
-## Edge length of your mesh in world units, as it is in the editor at scale 1.
 @export var mesh_size: float = 2.0
-## Index of the mesh surface that should show the texture. -1 = all surfaces. Use a
-## surface index if your mesh has separate surfaces for the top and the sides.
 @export var top_surface_index: int = -1
-## Show the texture without lighting, so colours match the image exactly.
 @export var unshaded: bool = false
 
 static var _material_cache: Dictionary = {}
 
 
-## Call right after instantiating, before adding to the scene tree.
 func setup(def: TileDef, tile_size: float) -> void:
 	var mesh_instance: MeshInstance3D = _get_or_create_mesh_instance()
 	var factor: float = tile_size / mesh_size
-	mesh_instance.scale = Vector3(factor, 1.0, factor)  # thickness is not scaled
+	mesh_instance.scale = Vector3(factor, 1.0, factor)
 	var material: StandardMaterial3D = _material_for(def)
 	if top_surface_index < 0:
 		mesh_instance.material_override = material
@@ -57,10 +41,9 @@ func _material_for(def: TileDef) -> StandardMaterial3D:
 	if def.texture != null:
 		material.albedo_texture = def.texture
 	else:
-		# No texture yet: flat colour derived from the tile id.
 		material.albedo_color = Color.from_hsv(float(absi(hash(def.id)) % 360) / 360.0, 0.45, 0.85)
 	material.roughness = 1.0
-	material.texture_repeat = false  # avoids bleeding at the tile borders
+	material.texture_repeat = false
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	if unshaded:
 		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED

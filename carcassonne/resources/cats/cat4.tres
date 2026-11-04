@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AvatarDef" format=3 uid="uid://bdl8c6fvxjtgg"]
+
+[ext_resource type="Script" uid="uid://dkyvt6pkm4wbq" path="res://scripts/avatar_def.gd" id="1_5nlfc"]
+[ext_resource type="Material" uid="uid://b83lq5dcgjawf" path="res://resources/cat4.tres" id="1_nq52s"]
+
+[resource]
+script = ExtResource("1_5nlfc")
+id = &"3"
+display_name = "Alien"
+material = ExtResource("1_nq52s")
+color = Color(0.25490198, 1, 0.20392157, 1)

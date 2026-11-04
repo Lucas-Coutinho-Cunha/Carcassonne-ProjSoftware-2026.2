@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bk7ag5dfui8du" path="res://scripts/lobby.gd" id="1_5gu6x"]
 [ext_resource type="Texture2D" uid="uid://nwrchjw2p871" path="res://assets/models/adoptsign_0.png" id="2_q60fs"]
 [ext_resource type="Texture2D" uid="uid://s4hx47ml2vjo" path="res://assets/raindrop.png" id="3_nqcc7"]
-[ext_resource type="AudioStream" uid="uid://n5n88nljxjnf" path="res://assets/audio/rain.mp3" id="4_nqcc7"]
-[ext_resource type="AudioStream" uid="uid://bdxrrn3ut8hju" path="res://assets/audio/neon_buzz.mp3" id="5_pc087"]
+[ext_resource type="AudioStream" uid="uid://n5n88nljxjnf" path="res://audio/rain.mp3" id="4_nqcc7"]
+[ext_resource type="AudioStream" uid="uid://bdxrrn3ut8hju" path="res://audio/neon_buzz.mp3" id="5_pc087"]
 [ext_resource type="Texture2D" uid="uid://bvb3r3woc25xs" path="res://assets/models/CardboardBox_0.png" id="6_apkv3"]
 [ext_resource type="PackedScene" uid="uid://b4q8vhbkspvft" path="res://scenes/player.tscn" id="7_omrgh"]
 
@@ -1014,10 +1014,8 @@ shadow_mesh = SubResource("ArrayMesh_bjdqx")
 [sub_resource type="BoxShape3D" id="BoxShape3D_apkv3"]
 size = Vector3(1.5, 1.5, 2)
 
-[node name="Lobby" type="Node3D" unique_id=420724548 node_paths=PackedStringArray("sign_mesh", "text_i")]
+[node name="Lobby" type="Node3D" unique_id=420724548]
 script = ExtResource("1_5gu6x")
-sign_mesh = NodePath("Map/Sign/SignMesh")
-text_i = NodePath("Map/Sign/SignMesh/text_ADOPTION20")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=830381958]
 environment = SubResource("Environment_pc087")

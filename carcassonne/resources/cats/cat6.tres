@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AvatarDef" format=3 uid="uid://c5ch3f8p3kfq6"]
+
+[ext_resource type="Material" uid="uid://c2nyxgweqidxo" path="res://resources/cat6.tres" id="1_68pbm"]
+[ext_resource type="Script" uid="uid://dkyvt6pkm4wbq" path="res://scripts/avatar_def.gd" id="1_858nw"]
+
+[resource]
+script = ExtResource("1_858nw")
+id = &"5"
+display_name = "Fishy"
+material = ExtResource("1_68pbm")
+color = Color(0.2627451, 0.49411765, 1, 1)

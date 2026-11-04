@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://1ugh1xp0dypf"]
+
+[ext_resource type="Script" uid="uid://bk7ag5dfui8du" path="res://scripts/lobby.gd" id="1_libvg"]
+[ext_resource type="PackedScene" uid="uid://b4q8vhbkspvft" path="res://scenes/player.tscn" id="2_1e233"]
+[ext_resource type="PackedScene" uid="uid://bu8a4r45wlhon" path="res://scenes/game.tscn" id="3_f2xmi"]
+
+[node name="NewLobby" type="Control" unique_id=1000131140]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_libvg")
+player_scene = ExtResource("2_1e233")
+game_scene = ExtResource("3_f2xmi")

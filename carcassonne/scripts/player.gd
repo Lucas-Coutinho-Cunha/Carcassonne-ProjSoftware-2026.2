@@ -5,7 +5,6 @@ extends Node3D
 @export_enum("Orange:1", "Black:2", "White:3", "Green:4", "Blue:5", "Yellow:6", "Red:7", "Pink:8") var body: int = 1
 
 var textures: Array[Resource] = []
-var avatar: int = 0
 var text_color: Color = Color.WHITE
 
 # Game state, filled in by Game through setup_game_state().
@@ -14,7 +13,16 @@ var display_name: String = ""
 var color: Color = Color.WHITE
 var score: int = 0
 var meeples_left: int = 0
+@export var model_mesh: MeshInstance3D   # the mesh that wears the avatar material
+@export var avatar_surface_index: int = -1   # -1 = every surface
 
+var avatar: AvatarDef
+var is_bot: bool = false
+
+
+func apply_avatar(def: AvatarDef) -> void:
+	avatar = def
+	def.apply_to(model_mesh, avatar_surface_index)
 
 func setup_game_state(p_id: int, p_color: Color, p_meeples: int) -> void:
 	id = p_id

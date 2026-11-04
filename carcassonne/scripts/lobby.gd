@@ -1,76 +1,106 @@
-extends Node3D
+extends Control
+## Lobby screen. Make a scene with a Control root, attach this script, and assign the two
+## exports in the inspector. The whole UI is built in code, so no other nodes are needed.
+## It needs the GameSession autoload to be registered.
 
-@export var sign_mesh: Node3D
+## Your Player scene (the model + player.gd). Used for the 3D avatar previews.
+@export var player_scene: PackedScene
+## The scene that contains the Game node. Loaded when "Start game" is pressed.
+@export var game_scene: PackedScene
+## Start every visit to the lobby with the default two players.
+@export var reset_on_open: bool = true
 
-@export var text_i: MeshInstance3D
-@onready var neon_buzz: AudioStreamPlayer = $Map/NeonBuzz
-
-var black_material: Resource = load("res://resources/black_material_sign.tres")
-var neon_material: Resource = load("res://resources/neon_material_sign.tres")
-var intro_neon_finished: bool = false
-var flicker: int
-var mouse_over: int
-
-var spawn_cat: Player
-var spawn_cat_anim: AnimationPlayer
-
-func _input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("Tap"):
-		if mouse_over == 1:
-			spawn_player(1)
+var _slots_box: VBoxContainer
+var _status_label: Label
+var _add_button: Button
+var _start_button: Button
 
 
 func _ready() -> void:
-	for i: MeshInstance3D in sign_mesh.get_children():
-		i.material_override = black_material
-		neon_buzz.play()
-	await get_tree().create_timer(1.0).timeout
-	for i: MeshInstance3D in sign_mesh.get_children():
-		i.material_override = neon_material
-		neon_buzz.play()
-	await get_tree().create_timer(0.2).timeout
-	for i: MeshInstance3D in sign_mesh.get_children():
-		i.material_override = black_material
-		neon_buzz.play()
-	await get_tree().create_timer(0.2).timeout
-	for i: MeshInstance3D in sign_mesh.get_children():
-		i.material_override = neon_material
-		neon_buzz.play()
-	await get_tree().create_timer(0.2).timeout
-	for i: MeshInstance3D in sign_mesh.get_children():
-		i.material_override = black_material
-		neon_buzz.play()
-	await get_tree().create_timer(0.2).timeout
-	for i: MeshInstance3D in sign_mesh.get_children():
-		i.material_override = neon_material
-		neon_buzz.play()
-		neon_buzz.volume_db -= 3
-	intro_neon_finished = true
+	_build_ui()
+	Sfx.hook_buttons(self)  # click sound on every button, including rows built later
+	GameSession.roster_changed.connect(_rebuild_slots, CONNECT_DEFERRED)
+	if reset_on_open:
+		GameSession.reset_to_defaults()
+	else:
+		_rebuild_slots()
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	if intro_neon_finished:
-		flicker += 1
-		if flicker % 60 == 0:
-			text_i.material_override = black_material
-			neon_buzz.play()
-		elif flicker % 45 == 0:
-			text_i.material_override = neon_material
-			neon_buzz.play()
-	
-	
+func _build_ui() -> void:
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var root: VBoxContainer = VBoxContainer.new()
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 24)
+	root.add_theme_constant_override("separation", 12)
+	add_child(root)
+
+	var title: Label = Label.new()
+	title.text = "Lobby"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 32)
+	root.add_child(title)
+
+	var scroll: ScrollContainer = ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(scroll)
+
+	_slots_box = VBoxContainer.new()
+	_slots_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_slots_box.add_theme_constant_override("separation", 8)
+	scroll.add_child(_slots_box)
+
+	_status_label = Label.new()
+	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	root.add_child(_status_label)
+
+	var buttons: HBoxContainer = HBoxContainer.new()
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	buttons.add_theme_constant_override("separation", 16)
+	root.add_child(buttons)
+
+	_add_button = Button.new()
+	_add_button.text = "Add player"
+	_add_button.pressed.connect(_on_add_pressed)
+	buttons.add_child(_add_button)
+
+	_start_button = Button.new()
+	_start_button.text = "Start game"
+	_start_button.pressed.connect(_on_start_pressed)
+	buttons.add_child(_start_button)
 
 
-func spawn_player(id: int) -> void:
-	spawn_cat = $Map/Boxes/Box1/CatPosition1/Player
-	spawn_cat_anim = $Map/Boxes/Box1/CatPosition1/Player/Cat/AnimationPlayer
-	spawn_cat.visible = true
-	spawn_cat_anim.play("emerge")
-	await spawn_cat_anim.animation_finished
-	spawn_cat_anim.play("lobbyidle")
+func _rebuild_slots() -> void:
+	for child: Node in _slots_box.get_children():
+		_slots_box.remove_child(child)
+		child.queue_free()
+	for i: int in GameSession.players.size():
+		var slot: LobbySlot = LobbySlot.new()
+		slot.player_scene = player_scene
+		_slots_box.add_child(slot)
+		# The first MIN_PLAYERS slots can't be removed, so the lobby never drops below 2.
+		slot.setup(i, i >= GameSession.MIN_PLAYERS)
+		slot.remove_requested.connect(_on_remove_requested)
+
+	var count: int = GameSession.players.size()
+	_add_button.disabled = count >= GameSession.MAX_PLAYERS
+	_start_button.disabled = not GameSession.can_start()
+	_status_label.text = "%d players (%d to %d allowed)" % [count, GameSession.MIN_PLAYERS, GameSession.MAX_PLAYERS]
 
 
+func _on_add_pressed() -> void:
+	GameSession.add_player()
 
-func _on_area_3d_mouse_entered() -> void:
-	mouse_over = 1
+
+func _on_remove_requested(index: int) -> void:
+	GameSession.remove_player(index)
+
+
+func _on_start_pressed() -> void:
+	if game_scene == null:
+		push_error("Lobby: game_scene is not set")
+		return
+	for i: int in GameSession.players.size():
+		var setup: PlayerSetup = GameSession.players[i]
+		if setup.display_name.strip_edges().is_empty():
+			setup.display_name = "Player %d" % (i + 1)
+	get_tree().change_scene_to_packed(game_scene)

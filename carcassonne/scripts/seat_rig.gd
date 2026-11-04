@@ -72,6 +72,7 @@ func show_player(turn: int) -> void:
 ## Seat view -> back to the orthogonal board camera.
 func show_board(turn: int) -> void:
 	var angle: float = _turn_angle(turn)
+	Sfx.play_camera_away()
 	await _fly(angle, angle, 1.0, 0.0, fly_out_time)
 	board_camera.make_current()
 

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundBank" format=3 uid="uid://cg5vh6fu2ifd1"]
+
+[ext_resource type="AudioStream" uid="uid://hgcujjsiv1kn" path="res://audio/mreow.wav" id="1_0ts5b"]
+[ext_resource type="Script" uid="uid://vi5pwc6n0r7a" path="res://scripts/sound_bank.gd" id="1_q0cod"]
+[ext_resource type="AudioStream" uid="uid://c6vwx5mk2haiw" path="res://audio/mp-meow.mp3" id="2_gh7s1"]
+[ext_resource type="AudioStream" uid="uid://cadr8egvljsvm" path="res://audio/Pop.wav" id="4_13fuk"]
+[ext_resource type="AudioStream" uid="uid://dlgfqx56mq8u4" path="res://audio/LowDrum.wav" id="5_7qgp0"]
+
+[resource]
+script = ExtResource("1_q0cod")
+ui_click = ExtResource("5_7qgp0")
+tile_placed = ExtResource("4_13fuk")
+meeple_placed = ExtResource("2_gh7s1")
+camera_away = ExtResource("1_0ts5b")
