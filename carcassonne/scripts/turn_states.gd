@@ -108,6 +108,14 @@ class BotTurn extends State:
 		ai.search_failed.connect(_on_failed, CONNECT_ONE_SHOT)
 		if not ai.request_move(CarcassonneAI.context_from_game(game)) and not _done:
 			_fallback()
+			return
+		# Watchdog: if no answer arrives in time, play a simple legal move instead of hanging.
+		var turn := game.turn_number
+		var limit := ai.max_time_ms / 1000.0 + 5.0
+		game.get_tree().create_timer(limit).timeout.connect(func() -> void:
+			if not _done and game.sm.current_name == &"bot_turn" and game.turn_number == turn:
+				push_warning("Bot timed out; using fallback move")
+				_fallback())
 
 	func exit() -> void:
 		if game.ai.move_ready.is_connected(_on_move_ready):

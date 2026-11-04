@@ -21,6 +21,9 @@ signal search_failed(reason: String)
 
 
 @export var max_time_ms: int = 4000
+## Web exports are single-threaded by default: the search then runs on the main thread and blocks
+## rendering, so it gets a much shorter budget. Raise it if the web bot feels too weak.
+@export var no_thread_max_time_ms: int = 400
 @export var weights: Dictionary = AIEvaluator.DEFAULT_WEIGHTS.duplicate()
 
 var _thread: Thread
@@ -32,7 +35,12 @@ var _has_result := false
 var _deadline := 0
 var _nodes := 0
 var _rng := RandomNumberGenerator.new()
+var _main_busy := false   # a main-thread search (no-thread builds) is in progress
 
+
+
+static func threads_available() -> bool:
+	return not OS.has_feature("nothreads")
 
 
 # API ENTRADA AQUI
@@ -70,6 +78,9 @@ func request_move(ctx: Dictionary) -> bool:
 	_result = {}
 	_info = {}
 	_mutex.unlock()
+	if not threads_available():
+		_run_on_main_thread.call_deferred(state, def)
+		return true
 	_thread = Thread.new()
 	var err := _thread.start(_worker.bind(state, def))
 	if err != OK:
@@ -89,7 +100,7 @@ func think_now(ctx: Dictionary) -> Dictionary:
 
 
 func is_thinking() -> bool:
-	return _thread != null and _thread.is_alive()
+	return _main_busy or (_thread != null and _thread.is_alive())
 
 
 func has_result() -> bool:
@@ -139,13 +150,36 @@ func _notification(what: int) -> void:
 func _worker(state: AIBoardSim.SimState, def: TileDef) -> void:
 	var t0 := Time.get_ticks_msec()
 	var out := _search_root(state, def)
+	_store_result(out, t0)
+	_finish.call_deferred()
+
+
+func _store_result(out: Array, t0: int) -> void:
 	_mutex.lock()
 	_result = out[0]
 	_info = out[1]
 	_info["ms"] = Time.get_ticks_msec() - t0
 	_has_result = true
 	_mutex.unlock()
-	_finish.call_deferred()
+
+
+## No-thread fallback (web export without Thread Support): same search, main thread, short budget.
+## Waits two frames first so the UI can draw "bot is thinking" before the page stalls.
+func _run_on_main_thread(state: AIBoardSim.SimState, def: TileDef) -> void:
+	_main_busy = true
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not is_inside_tree():
+		_main_busy = false
+		return
+	var saved_budget := max_time_ms
+	max_time_ms = mini(max_time_ms, no_thread_max_time_ms)
+	var t0 := Time.get_ticks_msec()
+	var out := _search_root(state, def)
+	max_time_ms = saved_budget
+	_main_busy = false
+	_store_result(out, t0)
+	_finish()
 
 
 ## Volta para a main thread, então o sinal é seguro para código de cena/UI.
